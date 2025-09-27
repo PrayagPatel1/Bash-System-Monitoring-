@@ -33,13 +33,12 @@ while [ "$user_input" != "quit" ]; do
     if [ "$user_input" == "show-all" ]; then
         echo 
 
-        echo "=== Overview ===" 
-
-        echo
-
-        echo "Hostname: $HOSTNAME"
-        echo "User: $USER"
-        echo "Operating System: $OSTYPE"
+        echo "General System Information" 
+        echo "-------------------------------------------------"
+        printf "%-20s %10s %10s\n" "Hostname" "User" "OS"
+        echo "-------------------------------------------------"
+        printf "%-20s %10s %10s\n" "$HOSTNAME" "$USER" "$OSTYPE"
+        echo "-------------------------------------------------"
 
         echo 
 
