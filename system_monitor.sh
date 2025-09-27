@@ -4,14 +4,6 @@ echo "=== System Health Dashboard ==="
 
 echo 
 
-# List of commands the program is going to read
-echo "Here is a list of commands you can input: 
-[1] show-all
-[2] show-cpu
-[3] show-mem
-[4] show-net
-[5] quit
-"
 
 # Constant Variables
 HOSTNAME=$(hostname)
@@ -23,6 +15,9 @@ CPU_CORES=$(lscpu | grep "^CPU(s):" | awk '{print $2}')
 PREV_IDLE=""
 PREV_TOTAL=""
 
+# Network Information Varibales
+
+
 user_input=""
 
 
@@ -30,7 +25,7 @@ user_input=""
 while [ "$user_input" != "quit" ]; do 
     read -p ">> " user_input
 
-    if [ "$user_input" == "show-all" ]; then
+    if [ "$user_input" == "run" ]; then
         echo 
 
         echo "General System Information" 
@@ -59,5 +54,18 @@ while [ "$user_input" != "quit" ]; do
         df -h | grep "^/dev" | awk '{printf "%-20s %10s %10s %10s %10s\n", $1, $6, $3, $4, $5}'
 
         echo "-----------------------------------------------------------------------"
+
+        echo 
+
+        echo "Network Infromation"
+        ESTABLISHED=$(ss -t | grep ESTAB | wc -l)
+        LISTENING=$(ss -tln | grep LISTEN | wc -l)
+        echo "-------------------------------------------------------------------------------------"
+        printf "%-10s %10s %20s %20s\n" "RX (MB)" "TX (MB)" "Active Connection" "Listening Services"
+        echo "-------------------------------------------------------------------------------------"
+        cat /proc/net/dev | grep eth0 | awk '{printf "%-10.2f %10.2f ", $2/1024/2024, $10/1024/1024}'
+        printf "%20s %20s\n" "$ESTABLISHED" "$LISTENING"
+        echo "-------------------------------------------------------------------------------------"
+
     fi 
 done 
